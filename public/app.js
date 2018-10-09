@@ -1,10 +1,9 @@
-// Grab the articles as a json
+
 $.getJSON("/articles", function(data) {
   // For each one
   for (var i = 0; i < data.length; i++) {
     // Display the apropos information on the page
     $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + "This would be where the summary is, but the api doesn't have a summary object." + "<br />" +  data[i].link + "</p>");
-    console.log(data);
   }
 });
 
@@ -36,9 +35,12 @@ $(document).on("click", "p", function() {
       // If there's a note in the article
       if (data.note) {
         // Place the title of the note in the title input
-        $("#titleinput").val(data.note.title);
+        $("#notes").append("<h2>" + data.note.title + "</h2>");
+        console.log(data.note)
         // Place the body of the note in the body textarea
-        $("#bodyinput").val(data.note.body);
+        $("#notes").append("<h3>" + data.note.body + "</h3>" + "<button>Delete</button>");
+
+        
       }
     });
 });
@@ -57,17 +59,21 @@ $(document).on("click", "#savenote", function() {
       title: $("#titleinput").val(),
       // Value taken from note textarea
       body: $("#bodyinput").val()
+
     }
   })
     // With that done
     .then(function(data) {
       // Log the response
+      console.log(data.length);
+
       console.log(data);
-      // Empty the notes section
-      $("#notes").empty();
+      $("#titleinput").val("");
+      $("#bodyinput").val("");
     });
 
   // Also, remove the values entered in the input and textarea for note entry
   $("#titleinput").val("");
   $("#bodyinput").val("");
+
 });
